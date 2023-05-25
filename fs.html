@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>旋转小风扇</title>
+    <link rel="stylesheet" href="css/mycss.css">
+    <script src="js/myjs.js"></script>
+</head>
+<style>
+	/* 清除全局默认margin和pandding */
+* {
+    margin: 0;
+    padding: 0;
+}
+/* 清除ul默认格式 */
+ul {
+    list-style: none;
+}
+@keyframes rotation{//定义旋转效果动画
+    0%{
+        transform:rotate(0deg);
+    }
+    100%{
+        transform:rotate(360deg);
+    }
+}
+/* 设置风扇整体样式 */
+#fan {
+    width: 250px;
+    height: 400px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    /* background-color: black; */
+}
+/* 设置风扇后盖样式 */
+#back_mask {
+    width: 250px;
+    height: 250px;
+    background-color: rgb(60, 226, 226);
+    border-radius: 50%;
+    z-index: 2;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+/* 设置风扇前盖样式 */
+#front_mask {
+    width: 230px;
+    height: 230px;
+    border: 10px solid rgb(9, 124, 177);
+    border-radius: 50%;
+    z-index: 4;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+#front_mask ul {
+    width: 100%;
+    height: 100%;
+}
+/* 设置前边面罩上的格子的统一样式 */
+#front_mask ul li {
+    width: 240px;
+    height: 2px;
+    background-color:rgb(9, 124, 177);
+    position: absolute;
+    top: 114px;
+    left: -5px;
+}
+#front_mask ul li:nth-child(1) {
+    transform: rotate(30deg);
+}
+#front_mask ul li:nth-child(2) {
+    transform: rotate(60deg);
+}
+#front_mask ul li:nth-child(3) {
+    transform: rotate(90deg);
+}
+#front_mask ul li:nth-child(4) {
+    transform: rotate(120deg);
+}
+#front_mask ul li:nth-child(5) {
+    transform: rotate(150deg);
+}
+#front_mask ul li:nth-child(6) {
+    transform: rotate(180deg);
+}
+/* 设置写有wp的部分样式 */
+#logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: rgb(9, 124, 177);
+    line-height: 50px;
+    left: 90px;
+    top: 90px;
+    text-align: center;
+    position: absolute;
+    color: white;
+    font-size: 16px;
+}
+/* 设置包裹扇叶的div样式 */
+#blade{
+    width: 250px;
+    height: 250px;
+    position: absolute; 
+    z-index: 3;
+    animation: rotation 0s linear 1s infinite;
+}
+/*设置扇叶的统一样式*/
+.blades {
+    width: 80px;
+    height: 80px;
+    background-color: yellowgreen;
+    position: absolute;
+    left: 45px;
+    top: 45px;
+    border-radius: 20% 50% 0 50%;
+}
+#blades_second{
+    transform-origin: right bottom;
+    transform: rotate(120deg);
+}
+#blades_third{
+    transform-origin: right bottom;
+    transform: rotate(240deg);
+}
+/* 设置风扇脖子 */
+#neck{
+    width: 50px;
+    height: 70px;
+    border: 3px solid rgb(9, 124, 177);
+    border-radius: 0 0 5% 5%;
+    background-color: rgb(60, 226, 226);
+    position: absolute;
+    left: 100px;
+    top: 240px;
+    z-index: 1;
+}
+/* 设置底座样式 */
+#foundation{
+    width: 184px;
+    height: 85px;
+    background-color:rgb(60, 226, 226);
+    border: 3px solid rgb(9, 124, 177);
+    border-radius: 50%;
+    position: absolute;
+    left: 30px;
+    top: 293px;
+    z-index: 0;
+}
+#found_task{
+    width: 66px;
+    height: 20px;
+    border: 2px solid rgb(9, 124, 177);
+    border-radius: 50%;
+    position: absolute;
+    left: 60px;
+    top: 5px;
+    background-color: rgb(131, 243, 243);
+}
+/* 设置按钮样式 */
+.btn{
+    width: 20px;
+    height: 20px;
+    border-radius: 70%;
+    background-color: yellowgreen;
+    position: absolute;
+}
+#gears_one{
+    left: 45px;
+    top: 45px;
+}
+#gears_two{
+    left: 70px;
+    top: 45px;
+}
+#gears_three{
+    left: 95px;
+    top: 45px;
+}
+#gears_four{
+    left: 120px;
+    top: 45px;
+}
+
+
+</style>
+<script>
+	window.onload = function() {
+    var oBtn = document.getElementsByClassName('btn');//获取按钮节点
+    var oBlade = document.getElementById('blade');//获取扇叶节点
+
+    //第一种写法利用定时器是风扇旋转
+    var timer;
+    for(let i = 0; i < oBtn.length; i++){//这里要用let声明i，以形成闭包效果
+        if(i == 0){
+            oBtn[0].onclick = function() {//当点击0按钮时停止转动
+                clearInterval(timer);
+            }
+        }else{
+            oBtn[i].onclick = function() {
+                var d = 0;
+                if(timer){//防止多次点击按钮设置多个定时器
+                    clearInterval(timer);//清除定时器
+                }
+                timer = setInterval(function() {//设置定时器
+                    if(d >= 360){
+                        d = 0;
+                    }
+                    d += i * 20 ;//设置转过角度
+                    oBlade.style.transform = 'rotate(' + d + 'deg)'
+                },100 - (i * 10))
+            }
+        }
+    }
+    
+    //第二种写法利用js和css动画效果来写
+    // for(let i = 0; i < oBtn.length; i++){//这里要用let声明i，以形成闭包效果
+    //     if (i == 0) {
+    //         oBtn[0].onclick = function () {//当点击0按钮时停止转动
+    //             oBlade.style.animationPlayState = 'paused';//将动画状态设置为暂停
+    //         }
+    //     } else {
+    //         oBtn[i].onclick = function () {//当点击0按钮时停止转动
+    //             oBlade.style.animationPlayState = 'running';
+    //             oBlade.style.animationDuration = 800 - i * 200 + 'ms';
+    //         }
+    //     }
+    // }
+}
+
+</script>
+<body>
+    <div id="fan">
+        <div id="back_mask"></div><!--风扇后盖-->
+        <div id="front_mask"><!--风扇前盖-->
+            <ul>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <div id="logo">WPF</div>
+        </div>
+        <div id="blade"><!--将风扇叶子包在一个div里在写JavaScript代码时让扇叶旋转更简单-->
+            <div id="blades_first" class="blades"></div><!--风扇扇叶-->
+            <div id="blades_second" class="blades"></div>
+            <div id="blades_third" class="blades"></div>
+        </div>
+        <div id="neck"></div><!--风扇脖子-->
+        <div id="foundation"><!--风扇底座-->
+            <div id="found_task"></div><!--档位按钮-->
+            <button id="gears_one" class="btn">0</button>
+            <button id="gears_two" class="btn">1</button>
+            <button id="gears_three" class="btn">2</button>
+            <button id="gears_four" class="btn">3</button>
+        </div>
+    </div>
+</body>
+</html>
